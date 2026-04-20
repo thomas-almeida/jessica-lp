@@ -759,155 +759,71 @@
         </button>
     </div>
 
-    <!-- PIX MODAL -->
-    <div id="pix-modal"
-        style="display:none;position:fixed;inset:0;z-index:200;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
-        <div id="pix-sheet"
-            style="background:#1c1116;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:32px 24px 48px;border-top:1px solid rgba(232,99,122,0.25);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.34,1.1,0.64,1);">
-
-            <!-- Handle -->
-            <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 28px;">
-            </div>
-
-            <!-- Loading state -->
-            <div id="pix-loading" style="text-align:center;padding:32px 0;">
-                <div id="spinner"
-                    style="width:40px;height:40px;border:2px solid rgba(232,99,122,0.2);border-top-color:var(--rose);border-radius:50%;margin:0 auto 20px;animation:spin 0.8s linear infinite;">
-                </div>
-                <p style="color:var(--muted);font-size:14px;">Gerando seu PIX...</p>
-            </div>
-
-            <!-- PIX content -->
-            <div id="pix-content" style="display:none;text-align:center;">
-                <p
-                    style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;font-weight:400;">
-                    Pagamento PIX</p>
-                <p
-                    style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--cream);margin-bottom:24px;line-height:1.3;">
-                    Escaneie o QR Code<br>ou copie o código</p>
-
-                <!-- QR code -->
-                <div style="background:#fff;border-radius:16px;padding:16px;display:inline-block;margin-bottom:24px;">
-                    <img id="pix-qr" src="" alt="QR Code PIX" style="width:180px;height:180px;display:block;">
-                </div>
-
-                <!-- Amount -->
-                <div
-                    style="background:rgba(232,99,122,0.08);border:1px solid rgba(232,99,122,0.2);border-radius:12px;padding:14px;margin-bottom:20px;">
-                    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">Valor a pagar</p>
-                    <p style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--cream);"
-                        id="pix-amount">R$ 29,00</p>
-                </div>
-
-                <!-- Copy code -->
-                <button id="copy-btn" onclick="copyPixCode()"
-                    style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:var(--bg3);border:1px solid rgba(232,99,122,0.25);border-radius:14px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:12px;transition:background 0.2s;word-break:break-all;text-align:left;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e8637a" stroke-width="1.5"
-                        stroke-linecap="round" flex-shrink="0" style="flex-shrink:0;">
-                        <rect x="9" y="9" width="13" height="13" rx="2" />
-                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-                    </svg>
-                    <span id="copy-label">Copiar código PIX</span>
-                </button>
-
-                <!-- Expiry -->
-                <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">
-                    ⏱ Expira em: <span id="pix-expiry" style="color:var(--cream);"></span>
-                </p>
-
-                <!-- Status -->
-                <div id="pix-status-box"
-                    style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--muted);">
-                    <span id="status-dot"
-                        style="width:8px;height:8px;border-radius:50%;background:#7ecb72;animation:blink 1.5s infinite;display:inline-block;"></span>
-                    <span id="status-text">Aguardando pagamento...</span>
-                </div>
-            </div>
-
-            <!-- Error state -->
-            <div id="pix-error" style="display:none;text-align:center;padding:16px 0;">
-                <p style="color:#f09595;font-size:15px;margin-bottom:16px;">Ops, algo deu errado.<br>Tente novamente.
-                </p>
-                <button onclick="closePix()"
-                    style="padding:12px 28px;border:1px solid rgba(232,99,122,0.3);border-radius:100px;background:transparent;color:var(--rose);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;">Fechar</button>
-            </div>
-
-            <!-- Close -->
-            <button onclick="closePix()"
-                style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.06);border:none;border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
-        </div>
-    </div>
-
+    <!-- STYLES FOR DYNAMIC MODAL -->
     <style>
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        #pix-modal.open {
+        .pix-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 9999;
             display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-
-        #pix-modal.open #pix-sheet {
-            transform: translateY(0);
+        .pix-overlay.active { opacity: 1; }
+        
+        .pix-sheet {
+            background: #ffffff;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px 24px 0 0;
+            padding: 32px 24px 48px;
+            border-top: 1px solid rgba(232,99,122,0.3);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.1, 0.64, 1);
+            position: relative;
+            text-align: center;
+        }
+        .pix-overlay.active .pix-sheet { transform: translateY(0); }
+        .pix-close {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255,255,255,0.06); border: none; border-radius: 50%;
+            width: 32px; height: 32px; color: var(--muted); font-size: 18px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes blink { 50% { opacity: 0.5; } }
+        
+        /* Button Spinner */
+        .btn-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
         }
     </style>
 
     <script>
         const PIX_URL = 'https://prod.morpheuspay.top/payments/pix';
-        const USER_ID = '69e1479eb0869b7cb9da6b9f';
+        const USER_ID = '69c6c2808c6afae869de31f1';
         const AMOUNT = 29;
-
         let pixCode = '';
-        let pollTimer = null;
 
-        /* ── Observers ── */
-        const heroCta = document.getElementById('hero-cta');
-        const sticky = document.getElementById('sticky');
-
-        new IntersectionObserver(entries => {
-            entries.forEach(e => e.isIntersecting
-                ? sticky.classList.remove('visible')
-                : sticky.classList.add('visible'));
-        }, { threshold: 0.5 }).observe(heroCta);
-
-        document.querySelectorAll('.reveal').forEach(el =>
-            new IntersectionObserver(([e]) => e.isIntersecting && el.classList.add('in'),
-                { threshold: 0.15 }).observe(el));
-
-        /* ── Modal ── */
-        function openPix() {
-            const modal = document.getElementById('pix-modal');
-            document.getElementById('pix-loading').style.display = 'block';
-            document.getElementById('pix-content').style.display = 'none';
-            document.getElementById('pix-error').style.display = 'none';
-            modal.style.display = 'flex';
-            requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('open')));
-            document.body.style.overflow = 'hidden';
-            generatePix();
-        }
-
-        function closePix() {
-            const modal = document.getElementById('pix-modal');
-            modal.classList.remove('open');
-            clearInterval(pollTimer);
-            setTimeout(() => {
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-            }, 400);
-        }
-
-        document.getElementById('pix-modal').addEventListener('click', e => {
-            if (e.target === document.getElementById('pix-modal')) closePix();
-        });
-
-        /* ── Generate PIX ── */
-        async function generatePix() {
-            const loading = document.getElementById('pix-loading');
-            const content = document.getElementById('pix-content');
-            const error = document.getElementById('pix-error');
-            const qrImg = document.getElementById('pix-qr');
+        async function openPix() {
+            const btns = document.querySelectorAll('button[onclick="openPix()"]');
+            btns.forEach(b => {
+                if (!b.dataset.oldHtml) b.dataset.oldHtml = b.innerHTML;
+                b.innerHTML = '<span class="btn-spinner"></span>';
+                b.disabled = true;
+                b.style.cursor = 'not-allowed';
+            });
 
             try {
                 const res = await fetch(PIX_URL, {
@@ -915,64 +831,96 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ userId: USER_ID, amount: AMOUNT })
                 });
-
-                if (!res.ok) throw new Error('Erro na API: ' + res.status);
-
                 const json = await res.json();
-                
-                // Extração precisa baseada no seu response
-                const data = json.paymentIntent?.data || json.data || json;
+                const data = json.paymentIntent?.data || json.data;
 
-                if (!data || (!data.pixCode && !data.pix_code)) {
-                    throw new Error('Dados do PIX não encontrados na resposta');
-                }
+                if (!data || (!data.pixCode && !data.pix_code)) throw new Error('Dados inválidos');
 
                 pixCode = data.pixCode || data.pix_code;
                 const qrUrl = data.qrCode || data.qr_code;
                 const expiry = data.expiresAt || data.expires_at;
-
-                // Prepara os dados no DOM
-                document.getElementById('pix-amount').textContent = 'R$ ' + AMOUNT.toFixed(2).replace('.', ',');
-
+                
+                let expiryTime = '';
                 if (expiry) {
                     const d = new Date(expiry);
-                    document.getElementById('pix-expiry').textContent =
-                        d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                    expiryTime = !isNaN(d.getTime()) ? d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '';
                 }
 
-                // Garantia de carregamento da imagem antes de mostrar o conteúdo
-                qrImg.onload = () => {
-                    loading.style.display = 'none';
-                    content.style.display = 'block';
-                };
-                
-                qrImg.onerror = () => {
-                    throw new Error('Falha ao carregar imagem do QR Code');
-                };
-
-                qrImg.src = qrUrl;
+                showModal(qrUrl, expiryTime);
 
             } catch (err) {
-                console.error('Erro ao gerar PIX:', err);
-                loading.style.display = 'none';
-                content.style.display = 'none';
-                error.style.display = 'block';
+                console.error(err);
+                alert('Erro ao gerar pagamento. Tente novamente.');
+            } finally {
+                btns.forEach(b => {
+                    b.innerHTML = b.dataset.oldHtml;
+                    b.dataset.oldHtml = '';
+                    b.disabled = false;
+                    b.style.cursor = 'pointer';
+                });
             }
         }
 
-        /* ── Copy PIX code ── */
+        function showModal(qrUrl, expiryTime) {
+            const overlay = document.createElement('div');
+            overlay.className = 'pix-overlay';
+            overlay.innerHTML = `
+                <div class="pix-sheet">
+                    <button class="pix-close" onclick="closePix()">×</button>
+                    <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 28px;"></div>
+                    <p style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;">Pagamento PIX</p>
+                    <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);margin-bottom:24px;">Escaneie o QR Code<br>ou copie o código</p>
+                    
+                    <div>
+                        <img src="${qrUrl}" style="width:240px;height:240px;display:block;">
+                    </div>
+
+                    <div style="background:rgba(232,99,122,0.08);border:1px solid rgba(232,99,122,0.2);border-radius:12px;padding:14px;margin-bottom:20px;">
+                        <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">Valor a pagar</p>
+                        <p style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--cream);">R$ ${AMOUNT.toFixed(2).replace('.', ',')}</p>
+                    </div>
+
+                    <button id="copy-btn" onclick="copyPixCode()" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:var(--rose);border:1px solid rgba(232,99,122,0.25);border-radius:14px;color:var(--bg);font-size:13px;cursor:pointer;margin-bottom:12px;">
+                        <span>Copiar código PIX</span>
+                    </button>
+
+                    ${expiryTime ? `<p style="font-size:12px;color:var(--muted);margin-bottom:20px;">⏱ Expira em: <span style="color:var(--cream);">${expiryTime}</span></p>` : ''}
+
+                    <div style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--muted);">
+                        <span style="width:8px;height:8px;border-radius:50%;background:#7ecb72;animation:blink 1.5s infinite;"></span>
+                        <span>Aguardando pagamento...</span>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(overlay);
+            document.body.style.overflow = 'hidden';
+            
+            // Trigger animation
+            requestAnimationFrame(() => overlay.classList.add('active'));
+        }
+
+        function closePix() {
+            const overlay = document.querySelector('.pix-overlay');
+            if (overlay) {
+                overlay.classList.remove('active');
+                setTimeout(() => {
+                    overlay.remove();
+                    document.body.style.overflow = '';
+                }, 400);
+            }
+        }
+
         function copyPixCode() {
             if (!pixCode) return;
             navigator.clipboard.writeText(pixCode).then(() => {
-                const lbl = document.getElementById('copy-label');
                 const btn = document.getElementById('copy-btn');
-                lbl.textContent = '✓ Código copiado!';
-                btn.style.borderColor = 'rgba(126,203,114,0.4)';
-                btn.style.color = '#7ecb72';
+                const span = btn.querySelector('span');
+                const oldText = span.innerText;
+                span.innerText = '✓ Código copiado!';
+                btn.style.borderColor = '#7ecb72';
                 setTimeout(() => {
-                    lbl.textContent = 'Copiar código PIX';
+                    span.innerText = oldText;
                     btn.style.borderColor = '';
-                    btn.style.color = '';
                 }, 3000);
             });
         }
