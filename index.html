@@ -904,6 +904,11 @@
 
         /* ── Generate PIX ── */
         async function generatePix() {
+            const loading = document.getElementById('pix-loading');
+            const content = document.getElementById('pix-content');
+            const error = document.getElementById('pix-error');
+            const qrImg = document.getElementById('pix-qr');
+
             try {
                 const res = await fetch(PIX_URL, {
                     method: 'POST',
@@ -911,16 +916,22 @@
                     body: JSON.stringify({ userId: USER_ID, amount: AMOUNT })
                 });
 
-                if (!res.ok) throw new Error('API error ' + res.status);
+                if (!res.ok) throw new Error('Erro na API: ' + res.status);
 
                 const json = await res.json();
+                
+                // Extração precisa baseada no seu response
                 const data = json.paymentIntent?.data || json.data || json;
 
-                pixCode = data.pixCode || data.pix_code || '';
-                const qrUrl = data.qrCode || data.qr_code || '';
-                const expiry = data.expiresAt || data.expires_at || '';
+                if (!data || (!data.pixCode && !data.pix_code)) {
+                    throw new Error('Dados do PIX não encontrados na resposta');
+                }
 
-                document.getElementById('pix-qr').src = qrUrl;
+                pixCode = data.pixCode || data.pix_code;
+                const qrUrl = data.qrCode || data.qr_code;
+                const expiry = data.expiresAt || data.expires_at;
+
+                // Prepara os dados no DOM
                 document.getElementById('pix-amount').textContent = 'R$ ' + AMOUNT.toFixed(2).replace('.', ',');
 
                 if (expiry) {
@@ -929,13 +940,23 @@
                         d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
                 }
 
-                document.getElementById('pix-loading').style.display = 'none';
-                document.getElementById('pix-content').style.display = 'block';
+                // Garantia de carregamento da imagem antes de mostrar o conteúdo
+                qrImg.onload = () => {
+                    loading.style.display = 'none';
+                    content.style.display = 'block';
+                };
+                
+                qrImg.onerror = () => {
+                    throw new Error('Falha ao carregar imagem do QR Code');
+                };
+
+                qrImg.src = qrUrl;
 
             } catch (err) {
-                console.error(err);
-                document.getElementById('pix-loading').style.display = 'none';
-                document.getElementById('pix-error').style.display = 'block';
+                console.error('Erro ao gerar PIX:', err);
+                loading.style.display = 'none';
+                content.style.display = 'none';
+                error.style.display = 'block';
             }
         }
 
