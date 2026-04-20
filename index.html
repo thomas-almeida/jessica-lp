@@ -250,7 +250,7 @@
             font-size: 11px;
             letter-spacing: 0.16em;
             text-transform: uppercase;
-            color: var(--rose);
+            
             margin-bottom: 24px;
             font-weight: 400;
         }
@@ -260,7 +260,6 @@
             font-size: clamp(26px, 7vw, 36px);
             font-weight: 300;
             line-height: 1.25;
-            color: var(--cream);
             margin-bottom: 24px;
         }
 
@@ -925,7 +924,21 @@
             });
         }
 
-        /* ── Intersection & reveals (already above) ── */
+        // Restaurar observers de animação
+        const heroCta = document.querySelector('.hero .cta-btn');
+        const sticky = document.getElementById('sticky');
+
+        if (heroCta && sticky) {
+            new IntersectionObserver(entries => {
+                entries.forEach(e => e.isIntersecting
+                    ? sticky.classList.remove('visible')
+                    : sticky.classList.add('visible'));
+            }, { threshold: 0.5 }).observe(heroCta);
+        }
+
+        document.querySelectorAll('.reveal').forEach(el =>
+            new IntersectionObserver(([e]) => e.isIntersecting && el.classList.add('in'),
+                { threshold: 0.15 }).observe(el));
     </script>
 </body>
 
