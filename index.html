@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma conversa que você nunca vai esquecer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rose: #e8637a;
+            --rose-dark: #c44560;
+            --rose-glow: rgba(232, 99, 122, 0.18);
+            --rose-dim: rgba(27, 27, 27, 0.08);
+            --cream: #1b130e;
+            --cream-muted: rgba(0, 0, 0, 0.6);
+            --bg: #FFFFFF;
+            --bg2: #FFFFFF;
+            --bg3: #FFFFFF;
+            --text: #000000;
+            --muted: rgba(9, 9, 9, 0.55);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background texture */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 60% 50% at 80% 10%, rgba(180, 60, 90, 0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 60% at 10% 80%, rgba(130, 30, 60, 0.10) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── HERO ── */
+        .hero {
+            min-height: 100svh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 0 48px;
+            text-align: center;
+        }
+
+        img {
+            width: 100%;
+            border-radius: 20px;
+            object-fit: cover;
+            object-position: center;
+            height: 400px;
+            margin: 0 auto 32px;
+        }
+
+        .eyebrow {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--rose);
+            margin-bottom: 32px;
+            opacity: 0;
+            animation: fadeUp 0.8s 0.1s forwards;
+        }
+
+        .eyebrow span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .eyebrow span::before,
+        .eyebrow span::after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 1px;
+            background: var(--rose);
+            opacity: 0.5;
+        }
+
+        .hero-headline {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(44px, 12vw, 64px);
+            font-weight: 400;
+            line-height: 0.79;
+            letter-spacing: -0.01em;
+            margin-bottom: 8px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.2s forwards;
+        }
+
+        .hero-headline em {
+            font-style: italic;
+            color: var(--rose);
+        }
+
+        .hero-sub {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(18px, 5vw, 22px);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--muted);
+            margin-bottom: 40px;
+            line-height: 1.5;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.35s forwards;
+        }
+
+        /* Avatar ring */
+        .avatar-ring {
+            width: 96px;
+            height: 96px;
+            margin: 0 auto 40px;
+            position: relative;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.15s forwards;
+        }
+
+        .avatar-ring::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 1.5px solid var(--rose);
+            opacity: 0.5;
+            animation: pulse-ring 2.5s ease-in-out infinite;
+        }
+
+        .avatar-ring::after {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border-radius: 50%;
+            border: 1px solid var(--rose);
+            opacity: 0.2;
+            animation: pulse-ring 2.5s 0.4s ease-in-out infinite;
+        }
+
+        .avatar-inner {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2a1520 0%, #1a0d12 100%);
+            border: 1px solid rgba(232, 99, 122, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            overflow: hidden;
+        }
+
+        /* CTA primary */
+        .cta-btn {
+            display: block;
+            width: 100%;
+            padding: 20px 32px;
+            background: var(--rose);
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            border: none;
+            border-radius: 100px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.15s;
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: fadeUp 0.9s 0.5s forwards;
+            text-align: center;
+        }
+
+        .cta-btn:active {
+            transform: scale(0.97);
+        }
+
+        .cta-btn:hover {
+            background: var(--rose-dark);
+        }
+
+        .cta-note {
+            font-size: 12px;
+            color: var(--muted);
+            opacity: 0;
+            animation: fadeUp 0.9s 0.6s forwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .dot-sep {
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: var(--rose);
+            opacity: 0.5;
+            display: inline-block;
+        }
+
+        /* ── DIVIDER ── */
+        .divider {
+            height: 1px;
+            background: linear-gradient(to right, transparent, rgba(232, 99, 122, 0.25), transparent);
+            margin: 0;
+        }
+
+        /* ── BODY COPY SECTION ── */
+        .section {
+            padding: 64px 0;
+        }
+
+        .section-label {
+            font-size: 11px;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--rose);
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        .big-quote {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(26px, 7vw, 36px);
+            font-weight: 300;
+            line-height: 1.25;
+            color: var(--cream);
+            margin-bottom: 24px;
+        }
+
+        .big-quote em {
+            font-style: italic;
+            color: var(--rose);
+        }
+
+        .body-text {
+            font-size: 15px;
+            line-height: 1.75;
+            color: var(--muted);
+        }
+
+        /* ── BENEFITS ── */
+        .benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            padding: 48px 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--rose-dim);
+            border: 1px solid rgba(232, 99, 122, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .benefit-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .benefit-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--cream);
+            margin-bottom: 4px;
+        }
+
+        .benefit-desc {
+            font-size: 13px;
+            color: var(--muted);
+            line-height: 1.6;
+        }
+
+        /* ── PRICE BOX ── */
+        .price-box {
+            background: var(--bg3);
+            border: 1px solid rgba(232, 99, 122, 0.2);
+            border-radius: 20px;
+            padding: 32px 28px;
+            text-align: center;
+            margin: 0 0 48px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--rose), transparent);
+        }
+
+        .price-badge {
+            display: inline-block;
+            font-size: 11px;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--rose);
+            border: 1px solid rgba(232, 99, 122, 0.35);
+            border-radius: 100px;
+            padding: 5px 14px;
+            margin-bottom: 24px;
+        }
+
+        .price-amount {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 56px;
+            font-weight: 300;
+            color: var(--cream);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .price-amount sup {
+            font-size: 22px;
+            vertical-align: super;
+            margin-right: 4px;
+        }
+
+        .price-period {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 28px;
+        }
+
+        /* ── PIX BADGE ── */
+        .pix-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          background: rgba(55,130,35,0.12);
+          border: 1px solid rgba(55,180,35,0.2);
+          border-radius: 100px;
+          padding: 8px 16px;
+          font-size: 13px;
+          color: #7ecb72;
+          margin-bottom: 24px;
+          font-weight: 400;
+        }
+
+        /* ── FAQ ── */
+        .faq-list {
+          display: flex;
+          flex-direction: column;
+          gap: 32px;
+          margin-top: 16px;
+        }
+
+        .faq-item {
+          border-bottom: 1px solid rgba(232, 99, 122, 0.1);
+          padding-bottom: 24px;
+        }
+
+        .faq-item:last-child {
+          border-bottom: none;
+        }
+
+        .faq-question {
+          font-size: 17px;
+          font-weight: 500;
+          color: var(--cream);
+          margin-bottom: 12px;
+          line-height: 1.4;
+        }
+
+        .faq-answer {
+          font-size: 14px;
+          color: var(--muted);
+          line-height: 1.6;
+        }
+
+        .pix-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #7ecb72;
+            animation: blink 1.5s ease-in-out infinite;
+        }
+
+        /* ── TESTIMONIALS ── */
+        .testimonials {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding: 0 0 64px;
+        }
+
+        .testimonials img {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            object-fit: cover;
+            object-position: center;
+            margin-bottom: 12px;
+        }
+
+        .testi-card {
+            background: var(--bg3);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .testi-stars {
+            color: var(--rose);
+            font-size: 12px;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+
+        .testi-text {
+            font-size: 14px;
+            color: var(--cream-muted);
+            line-height: 1.65;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .testi-author {
+            font-size: 12px;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* ── FOOTER ── */
+        .footer {
+            padding: 32px 0 48px;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+
+        /* Scroll CTA (sticky bottom) */
+        .sticky-cta {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 16px 24px 24px;
+            background: linear-gradient(to top, var(--bg) 80%, transparent);
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.34, 1.26, 0.64, 1);
+        }
+
+        .sticky-cta.visible {
+            transform: translateY(0);
+        }
+
+        .sticky-cta a {
+            display: block;
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 18px 32px;
+            background: var(--rose);
+            color: #fff;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            border-radius: 100px;
+            text-decoration: none;
+            text-align: center;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: 0 8px 32px rgba(232, 99, 122, 0.35);
+        }
+
+        .sticky-cta a:active {
+            transform: scale(0.97);
+        }
+
+        .sticky-cta a:hover {
+            background: var(--rose-dark);
+        }
+
+        /* Animations */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse-ring {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.5;
+            }
+
+            50% {
+                transform: scale(1.06);
+                opacity: 0.2;
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.7s ease, transform 0.7s ease;
+        }
+
+        .reveal.in {
+            opacity: 1;
+            transform: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <!-- HERO -->
+        <section class="hero">
+            <p class="eyebrow"><span>Para você que merece mais</span></p>
+            <div>
+                <img src="/JESSICA.jpeg" alt="JESSICA">
+            </div>
+            <h1 class="hero-headline">
+                Falta só <em>mais um<br>passo</em> pra você<br>me encontrar
+            </h1>
+            <p class="hero-sub">Uma conversa que te ouve, te provoca,<br>te prende — do jeito certo.</p>
+
+            <button class="cta-btn" id="hero-cta" onclick="openPix()">
+                Quero começar agora →
+            </button>
+
+            <p class="cta-note">
+                <span>PIX instantâneo</span>
+                <span class="dot-sep"></span>
+                <span>Acesso imediato</span>
+                <span class="dot-sep"></span>
+                <span>Só você e eu</span>
+            </p>
+        </section>
+
+        <div class="divider"></div>
+
+        <!-- COPY SECTION -->
+        <section class="section reveal">
+            <p class="section-label">O que você vai ter</p>
+            <h2 class="big-quote">Sem julgamento. Sem frescura. Sem pressa. <em>Só você e eu.</em></h2>
+            <p class="body-text">Você merece alguém que te escute de verdade — que te faça relaxar, que saiba prender
+                sua atenção e que esteja aqui quando você precisar. Isso é exatamente o que você vai encontrar.</p>
+        </section>
+
+        <!-- BENEFITS -->
+        <div class="benefits">
+            <div class="benefit-item reveal">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#e8637a" stroke-width="1.5" stroke-linecap="round">
+                        <path d="M12 21c-4.97-3.5-8-7-8-10a8 8 0 0 1 16 0c0 3-3.03 6.5-8 10z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="benefit-title">Atenção de verdade</p>
+                    <p class="benefit-desc">Aqui não tem pressa. Você fala, eu escuto. Simples assim.</p>
+                </div>
+            </div>
+
+            <div class="benefit-item reveal">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#e8637a" stroke-width="1.5" stroke-linecap="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="benefit-title">Conversa que prende</p>
+                    <p class="benefit-desc">Eu sei como te deixar com um sorriso diferente. Quer testar?</p>
+                </div>
+            </div>
+
+            <div class="benefit-item reveal">
+                <div class="benefit-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#e8637a" stroke-width="1.5" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                    </svg>
+                </div>
+                <div>
+                    <p class="benefit-title">Acesso imediato</p>
+                    <p class="benefit-desc">Paga pelo PIX e já começa. Sem espera, sem complicação.</p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <img src="/body.jpeg" alt="">
+            <img src="/capa.jpeg" alt="">
+        </div>
+
+        <div class="divider"></div>
+
+        <!-- PRICE -->
+        <section class="section reveal">
+            <div class="price-box">
+                <div class="price-badge">Oferta especial</div>
+                <div class="pix-badge">
+                    <span class="pix-dot"></span>
+                    PIX — pagamento instantâneo
+                </div>
+                <div class="price-amount"><sup>R$</sup>29,00</div>
+                <p class="price-period">acesso garantido • começa agora</p>
+                <button onclick="openPix()" class="cta-btn"
+                    style="animation: none; opacity: 1; margin-bottom: 0; border: none; cursor: pointer;">
+                    Pagar com PIX e começar →
+                </button>
+            </div>
+        </section>
+
+        <!-- TESTIMONIALS -->
+        <section class="reveal">
+            <p class="section-label" style="margin-bottom: 20px;">O que estão dizendo</p>
+            <div class="testimonials">
+                <div class="testi-card">
+                    <img src="/test-1.jpeg" alt="">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"Não esperava me sentir tão à vontade. A conversa fluiu de um jeito que
+                        raramente acontece. Valeu cada centavo."</p>
+                    <p class="testi-author">— R.M., São Paulo</p>
+                </div>
+                <div class="testi-card">
+                    <img src="/test-2.jpeg" alt="">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"Entrei por curiosidade e acabei ficando muito mais tempo do que planejei. Ela
+                        realmente sabe prender a atenção."</p>
+                    <p class="testi-author">— G.T., Rio de Janeiro</p>
+                </div>
+                <div class="testi-card">
+                    <img src="/test-3.jpeg" alt="">
+                    <div class="testi-stars">★★★★★</div>
+                    <p class="testi-text">"Uma conversa comigo pode ser exatamente o que você tá precisando hoje… E foi.
+                        Recomendo."</p>
+                    <p class="testi-author">— L.F., Curitiba</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ -->
+        <section class="section reveal">
+            <p class="section-label">Dúvidas Frequentes</p>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">O que acontece após o pagamento?</h3>
+                    <p class="faq-answer">Assim que o pagamento for confirmado, você vai ter acesso ao meu WhatsApp e vamos começar o nosso relacionamento e acompanhamento exclusivo pelo tempo que você quiser, com todos os benefícios acima.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Você é IA?</h3>
+                    <p class="faq-answer">Não, sou uma mulher real e que adora servir, comigo, você vai ter conexões reais e sinceras sem fingimento e frescura, você está falando com alguém que te quer bem!</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Quanto tempo dura o serviço?</h3>
+                    <p class="faq-answer">Fico uma semana inteira sendo a sua acompanhante, 24/7 sem demorar pra responder ou atender suas ligações</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- FINAL CTA -->
+        <section class="section reveal" style="text-align:center; padding-bottom: 120px;">
+            <h2 class="big-quote" style="margin-bottom: 16px;">
+                Vem conversar comigo.<br><em>Talvez você não queira<br>mais parar.</em>
+            </h2>
+            <p class="body-text" style="margin-bottom: 32px;">Uma conversa que pode ser exatamente o que você tá
+                precisando hoje.</p>
+            <button onclick="openPix()" class="cta-btn" style="animation:none;opacity:1;border:none;cursor:pointer;">
+                Garantir meu acesso agora →
+            </button>
+            <p class="cta-note" style="margin-top: 16px; opacity: 0.7;">Pagamento via PIX • Acesso instantâneo</p>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p class="footer-text">
+                Pagamento 100% seguro via PIX<br>
+                Acesso liberado automaticamente após confirmação
+            </p>
+        </footer>
+    </div>
+
+    <!-- Sticky CTA -->
+    <div class="sticky-cta" id="sticky">
+        <button onclick="openPix()"
+            style="display:block;width:100%;max-width:480px;margin:0 auto;padding:18px 32px;background:var(--rose);color:#fff;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;border:none;border-radius:100px;cursor:pointer;box-shadow:0 8px 32px rgba(232,99,122,0.35);">
+            Quero começar agora →
+        </button>
+    </div>
+
+    <!-- PIX MODAL -->
+    <div id="pix-modal"
+        style="display:none;position:fixed;inset:0;z-index:200;align-items:flex-end;justify-content:center;background:rgba(0,0,0,0.75);backdrop-filter:blur(4px);">
+        <div id="pix-sheet"
+            style="background:#1c1116;width:100%;max-width:480px;border-radius:24px 24px 0 0;padding:32px 24px 48px;border-top:1px solid rgba(232,99,122,0.25);transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.34,1.1,0.64,1);">
+
+            <!-- Handle -->
+            <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 28px;">
+            </div>
+
+            <!-- Loading state -->
+            <div id="pix-loading" style="text-align:center;padding:32px 0;">
+                <div id="spinner"
+                    style="width:40px;height:40px;border:2px solid rgba(232,99,122,0.2);border-top-color:var(--rose);border-radius:50%;margin:0 auto 20px;animation:spin 0.8s linear infinite;">
+                </div>
+                <p style="color:var(--muted);font-size:14px;">Gerando seu PIX...</p>
+            </div>
+
+            <!-- PIX content -->
+            <div id="pix-content" style="display:none;text-align:center;">
+                <p
+                    style="font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;font-weight:400;">
+                    Pagamento PIX</p>
+                <p
+                    style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--cream);margin-bottom:24px;line-height:1.3;">
+                    Escaneie o QR Code<br>ou copie o código</p>
+
+                <!-- QR code -->
+                <div style="background:#fff;border-radius:16px;padding:16px;display:inline-block;margin-bottom:24px;">
+                    <img id="pix-qr" src="" alt="QR Code PIX" style="width:180px;height:180px;display:block;">
+                </div>
+
+                <!-- Amount -->
+                <div
+                    style="background:rgba(232,99,122,0.08);border:1px solid rgba(232,99,122,0.2);border-radius:12px;padding:14px;margin-bottom:20px;">
+                    <p style="font-size:12px;color:var(--muted);margin-bottom:4px;">Valor a pagar</p>
+                    <p style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;color:var(--cream);"
+                        id="pix-amount">R$ 29,00</p>
+                </div>
+
+                <!-- Copy code -->
+                <button id="copy-btn" onclick="copyPixCode()"
+                    style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;background:var(--bg3);border:1px solid rgba(232,99,122,0.25);border-radius:14px;color:var(--cream);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;margin-bottom:12px;transition:background 0.2s;word-break:break-all;text-align:left;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#e8637a" stroke-width="1.5"
+                        stroke-linecap="round" flex-shrink="0" style="flex-shrink:0;">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    <span id="copy-label">Copiar código PIX</span>
+                </button>
+
+                <!-- Expiry -->
+                <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">
+                    ⏱ Expira em: <span id="pix-expiry" style="color:var(--cream);"></span>
+                </p>
+
+                <!-- Status -->
+                <div id="pix-status-box"
+                    style="display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;color:var(--muted);">
+                    <span id="status-dot"
+                        style="width:8px;height:8px;border-radius:50%;background:#7ecb72;animation:blink 1.5s infinite;display:inline-block;"></span>
+                    <span id="status-text">Aguardando pagamento...</span>
+                </div>
+            </div>
+
+            <!-- Error state -->
+            <div id="pix-error" style="display:none;text-align:center;padding:16px 0;">
+                <p style="color:#f09595;font-size:15px;margin-bottom:16px;">Ops, algo deu errado.<br>Tente novamente.
+                </p>
+                <button onclick="closePix()"
+                    style="padding:12px 28px;border:1px solid rgba(232,99,122,0.3);border-radius:100px;background:transparent;color:var(--rose);font-family:'DM Sans',sans-serif;font-size:14px;cursor:pointer;">Fechar</button>
+            </div>
+
+            <!-- Close -->
+            <button onclick="closePix()"
+                style="position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.06);border:none;border-radius:50%;width:32px;height:32px;color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1;">×</button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #pix-modal.open {
+            display: flex;
+        }
+
+        #pix-modal.open #pix-sheet {
+            transform: translateY(0);
+        }
+    </style>
+
+    <script>
+        const PIX_URL = 'https://phone.morpheuspay.top/payments/pix';
+        const USER_ID = '69e1479eb0869b7cb9da6b9f';
+        const AMOUNT = 29;
+
+        let pixCode = '';
+        let pollTimer = null;
+
+        /* ── Observers ── */
+        const heroCta = document.getElementById('hero-cta');
+        const sticky = document.getElementById('sticky');
+
+        new IntersectionObserver(entries => {
+            entries.forEach(e => e.isIntersecting
+                ? sticky.classList.remove('visible')
+                : sticky.classList.add('visible'));
+        }, { threshold: 0.5 }).observe(heroCta);
+
+        document.querySelectorAll('.reveal').forEach(el =>
+            new IntersectionObserver(([e]) => e.isIntersecting && el.classList.add('in'),
+                { threshold: 0.15 }).observe(el));
+
+        /* ── Modal ── */
+        function openPix() {
+            const modal = document.getElementById('pix-modal');
+            document.getElementById('pix-loading').style.display = 'block';
+            document.getElementById('pix-content').style.display = 'none';
+            document.getElementById('pix-error').style.display = 'none';
+            modal.style.display = 'flex';
+            requestAnimationFrame(() => requestAnimationFrame(() => modal.classList.add('open')));
+            document.body.style.overflow = 'hidden';
+            generatePix();
+        }
+
+        function closePix() {
+            const modal = document.getElementById('pix-modal');
+            modal.classList.remove('open');
+            clearInterval(pollTimer);
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }, 400);
+        }
+
+        document.getElementById('pix-modal').addEventListener('click', e => {
+            if (e.target === document.getElementById('pix-modal')) closePix();
+        });
+
+        /* ── Generate PIX ── */
+        async function generatePix() {
+            try {
+                const res = await fetch(PIX_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: USER_ID, amount: AMOUNT })
+                });
+
+                if (!res.ok) throw new Error('API error ' + res.status);
+
+                const json = await res.json();
+                const data = json.paymentIntent?.data || json.data || json;
+
+                pixCode = data.pixCode || data.pix_code || '';
+                const qrUrl = data.qrCode || data.qr_code || '';
+                const expiry = data.expiresAt || data.expires_at || '';
+
+                document.getElementById('pix-qr').src = qrUrl;
+                document.getElementById('pix-amount').textContent = 'R$ ' + AMOUNT.toFixed(2).replace('.', ',');
+
+                if (expiry) {
+                    const d = new Date(expiry);
+                    document.getElementById('pix-expiry').textContent =
+                        d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+                }
+
+                document.getElementById('pix-loading').style.display = 'none';
+                document.getElementById('pix-content').style.display = 'block';
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('pix-loading').style.display = 'none';
+                document.getElementById('pix-error').style.display = 'block';
+            }
+        }
+
+        /* ── Copy PIX code ── */
+        function copyPixCode() {
+            if (!pixCode) return;
+            navigator.clipboard.writeText(pixCode).then(() => {
+                const lbl = document.getElementById('copy-label');
+                const btn = document.getElementById('copy-btn');
+                lbl.textContent = '✓ Código copiado!';
+                btn.style.borderColor = 'rgba(126,203,114,0.4)';
+                btn.style.color = '#7ecb72';
+                setTimeout(() => {
+                    lbl.textContent = 'Copiar código PIX';
+                    btn.style.borderColor = '';
+                    btn.style.color = '';
+                }, 3000);
+            });
+        }
+
+        /* ── Intersection & reveals (already above) ── */
+    </script>
+</body>
+
+</html>
