@@ -29,7 +29,7 @@
         }
 
         :root {
-            --rose: #e8637a;
+            --rose: #f7163c;
             --rose-dark: #c44560;
             --rose-glow: rgba(232, 99, 122, 0.18);
             --rose-dim: rgba(27, 27, 27, 0.08);
@@ -100,6 +100,14 @@
             margin: 0 auto 32px;
         }
 
+        video {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            margin: 0 auto 32px;
+            box-shadow: 0 12px 48px rgba(232, 99, 122, 0.25);
+        }
+
 
         .checkout-img {
             height: 120px;
@@ -136,13 +144,15 @@
         }
 
         .hero-headline {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: sans-serif;
             font-size: clamp(44px, 12vw, 64px);
-            font-weight: 400;
+            font-weight: extra-bold;
             line-height: 0.79;
-            letter-spacing: -0.01em;
+            letter-spacing: -0.0em;
             margin-bottom: 8px;
             opacity: 0;
+            color: var(--rose);
+            text-transform: uppercase;
             animation: fadeUp 0.9s 0.2s forwards;
         }
 
@@ -152,13 +162,14 @@
         }
 
         .hero-sub {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: sans-serif;
             font-size: clamp(18px, 5vw, 22px);
             font-weight: 300;
             font-style: italic;
             color: var(--muted);
+            margin-top: 20px;
             margin-bottom: 40px;
-            line-height: 1.5;
+            line-height: 0.9;
             opacity: 0;
             animation: fadeUp 0.9s 0.35s forwards;
         }
@@ -609,15 +620,15 @@
         <section class="hero">
             <p class="eyebrow"><span>Tem planos pra hoje ? 🔥</span></p>
             <div>
-                <img id="hero-img" src="/JESSICA.jpeg" alt="JESSICA">
+                <video src="/video.mp4" autoplay muted loop playsinline webkit-playsinline preload="auto"></video>
             </div>
             <h1 class="hero-headline">
-                Falta só <em>mais um<br>passo</em> pra você<br>me encontrar
+                Vem me ver de 4 agora
             </h1>
-            <p class="hero-sub">Uma conversa que te ouve, te provoca,<br>te prende — do jeito certo.</p>
+            <p class="hero-sub">Toda safada e louca pra te dar! Clica aqui embaixo pra começar!</p>
 
             <button class="cta-btn" id="hero-cta" onclick="openPix()">
-                Quero Começar Agora 🔥💖
+                Vem Me Ver P3L@D4 🔥
             </button>
 
             <p class="cta-note">
@@ -762,7 +773,7 @@
             <p class="body-text" style="margin-bottom: 32px;">Uma conversa que pode ser exatamente o que você tá
                 precisando hoje.</p>
             <button onclick="openPix()" class="cta-btn" style="animation:none;opacity:1;border:none;cursor:pointer;">
-                Garantir meu acesso agora →
+                Vem Me Ver P3L@D4 🔥
             </button>
             <p class="cta-note" style="margin-top: 16px; opacity: 0.7;">Pagamento via PIX • Acesso instantâneo</p>
         </section>
