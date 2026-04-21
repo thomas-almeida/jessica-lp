@@ -1043,6 +1043,20 @@
         document.querySelectorAll('.reveal').forEach(el =>
             new IntersectionObserver(([e]) => e.isIntersecting && el.classList.add('in'),
                 { threshold: 0.15 }).observe(el));
+
+        // Ensure videos autoplay on load (some browsers need a little nudge)
+        (function() {
+            function playVideos() {
+                document.querySelectorAll('video').forEach(v => {
+                    v.play().catch(e => console.warn('Video play failed:', e));
+                });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', playVideos);
+            } else {
+                playVideos();
+            }
+        })();
     </script>
 </body>
 
